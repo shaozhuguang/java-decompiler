@@ -5,11 +5,9 @@ import com.farmer.x.utils.DecompilerUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.util.List;
 
 public class DecompilerTest {
 
@@ -75,6 +73,49 @@ public class DecompilerTest {
         String customClassFile = classPath + "CompilerAndJarTools.class";
         String decompileJava = DecompilerUtils.decompile(DecompilerUtils.read2Bytes(customClassFile));
         System.out.printf("\r\n----- %s 反编译结果： -----\r\n\r\n", customClassFile);
+        System.out.println(decompileJava);
+    }
+
+    @Test
+    public void testOutJarFile() throws Exception {
+        String jarFile = classPath + "contract.jar";
+        String decompileJava = DecompilerUtils.decompileJarFile(jarFile, "com/jd/blockchain/contract/AssetContractImpl", true, null);
+        System.out.printf("\r\n----- %s 反编译结果： -----\r\n\r\n", jarFile);
+        System.out.println(decompileJava);
+    }
+
+    @Test
+    public void readJarFile() throws Exception {
+        String jarFile = classPath + "contract.jar";
+        String decompileJava = DecompilerUtils.decompileJarFile(jarFile, DecompilerUtils.MANIFEST_MF, false, null);
+        System.out.printf("\r\n----- %s 反编译结果： -----\r\n\r\n", jarFile);
+        System.out.println(decompileJava);
+    }
+
+    @Test
+    public void readManiFestFromJarFile() throws Exception {
+        String jarFile = classPath + "contract.jar";
+        List<String> decompileJava = DecompilerUtils.readManifest2Array(jarFile, null);
+        System.out.printf("\r\n----- %s 反编译结果： -----\r\n\r\n", jarFile);
+        for (String content : decompileJava) {
+            System.out.println(content);
+        }
+    }
+
+    @Test
+    public void testMainClassFromJarFile() throws Exception {
+        String jarFile = classPath + "contract.jar";
+        String decompileJava = DecompilerUtils.decompileMainClassFromJarFile(jarFile);
+        System.out.printf("\r\n----- %s 反编译结果： -----\r\n\r\n", jarFile);
+        System.out.println(decompileJava);
+    }
+
+    @Test
+    public void testMainClassFromBytes() throws Exception {
+        String jarFile = classPath + "contract.jar";
+        byte[] content = DecompilerUtils.read2Bytes(jarFile);
+        String decompileJava = DecompilerUtils.decompileMainClassFromBytes(content);
+        System.out.printf("\r\n----- %s 反编译结果： -----\r\n\r\n", jarFile);
         System.out.println(decompileJava);
     }
 }
